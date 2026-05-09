@@ -239,113 +239,56 @@ footer {
   color: var(--text-2);
 }
 
-.hero-name-block {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
-.hero-line-accent {
-  width: 40px; height: 1px;
-  background: var(--accent);
-  opacity: 0.4;
-  flex-shrink: 0;
-}
 .hero-name {
+  margin-top: 3rem;
   font-size: 0.65rem;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--text-3);
   font-style: italic;
 }
 
-.hero-scroll {
-  position: absolute;
-  bottom: 2.8rem; left: var(--pad-x);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.8rem;
-  font-size: 0.52rem;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: var(--text-3);
-}
-.scroll-line {
-  width: 1px; height: 44px;
-  background: linear-gradient(to bottom, var(--accent), transparent);
-  opacity: 0.5;
-}
-
 /* ================================================================
-   PHOTO PREVIEW — Index
+   INDEX — single photo + poem
    ================================================================ */
-.preview-section {
-  padding: 7rem var(--pad-x);
-  border-top: 1px solid var(--line);
-}
-
-.preview-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 3px;
-}
-
-.preview-photo {
-  position: relative;
+.index-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
-  cursor: pointer;
-  aspect-ratio: 3 / 2;
-  background: var(--bg-card);
+  position: relative;
 }
-.preview-photo.large {
-  grid-row: span 2;
-  aspect-ratio: auto;
-}
-
-.preview-photo > img {
-  position: absolute; inset: 0;
+.index-photo img {
   width: 100%; height: 100%;
   object-fit: cover;
+  filter: brightness(0.84) contrast(1.05) saturate(0.75);
   transition: transform 0.9s var(--ease-slow), filter 0.9s var(--ease);
-  filter: brightness(0.85) contrast(1.05) saturate(0.75);
 }
-.preview-photo:hover > img {
-  transform: scale(1.04);
-  filter: brightness(0.92) contrast(1.08) saturate(0.8);
-}
-
-.photo-info {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  padding: 2rem 1.5rem;
-  background: linear-gradient(to top, rgba(10,8,6,0.88) 0%, transparent 100%);
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  opacity: 0;
-  transition: opacity 0.4s var(--ease);
-  z-index: 2;
-}
-.preview-photo:hover .photo-info { opacity: 1; }
-.photo-num   { font-size: 0.52rem; letter-spacing: 0.18em; color: var(--text-3); }
-.photo-title { font-family: var(--font-serif); font-size: 1.1rem; font-style: italic; color: var(--text); }
-
-/* ================================================================
-   AESTHESIS PREVIEW — Index
-   ================================================================ */
-.aesthesis-section {
-  padding: 7rem var(--pad-x);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 5rem;
-  align-items: start;
-  border-top: 1px solid var(--line);
+.index-photo:hover img {
+  transform: scale(1.03);
+  filter: brightness(0.9) contrast(1.06) saturate(0.8);
 }
 
-.aesthesis-section .section-label { margin-bottom: 0; }
-.aesthesis-section > *:first-child { grid-column: 1; align-self: start; }
-.aesthesis-section .poem-preview   { grid-column: 2; }
-.aesthesis-section .section-cta    { grid-column: 2; }
+.index-poem {
+  padding: 8rem var(--pad-x);
+  max-width: 600px;
+}
+.index-poem .poem-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 300;
+  line-height: 1.1;
+  margin-bottom: 2.5rem;
+  color: var(--text);
+}
+.index-poem .poem-body {
+  font-family: var(--font-script);
+  font-size: 1.2rem;
+  line-height: 1.9;
+  color: var(--text-2);
+  margin-bottom: 3rem;
+}
+.index-poem .section-cta { margin-top: 0; }
 
 /* ================================================================
    FOTOS PAGE
