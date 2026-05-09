@@ -249,22 +249,32 @@ footer {
 }
 
 /* ================================================================
-   INDEX — single photo + poem
+   INDEX — photo grid + poem
    ================================================================ */
+.index-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 3px;
+  cursor: pointer;
+}
 .index-photo {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  background: var(--bg-card);
+}
+.index-photo.large {
+  grid-row: span 2;
+  aspect-ratio: auto;
 }
 .index-photo img {
+  position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
   filter: brightness(0.84) contrast(1.05) saturate(0.75);
   transition: transform 0.9s var(--ease-slow), filter 0.9s var(--ease);
 }
-.index-photo:hover img {
+.index-grid:hover .index-photo img {
   transform: scale(1.03);
   filter: brightness(0.9) contrast(1.06) saturate(0.8);
 }
