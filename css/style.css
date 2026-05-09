@@ -16,13 +16,13 @@
   --line-warm:   rgba(195, 152, 65, 0.16);
   --line-glow:   rgba(200, 158, 68, 0.32);
 
-  --text:        #e5cfA0;
-  --text-2:      #b08a58;
-  --text-3:      #664c2a;
+  --text:        #e8d5a8;
+  --text-2:      #c0965e;
+  --text-3:      #9a7848;
   --text-dim:    rgba(229, 207, 160, 0.06);
 
   --accent:      #c4880f;
-  --accent-dim:  #8a6010;
+  --accent-dim:  #a87c1a;
   --accent-hot:  #dea02a;
   --accent-bg:   rgba(196, 136, 15, 0.06);
 
@@ -339,7 +339,6 @@ footer::before {
   font-size: 0.58rem;
   letter-spacing: 0.14em;
   color: var(--text-3);
-  opacity: 0.45;
   text-align: right;
   line-height: 1.9;
 }
@@ -474,7 +473,6 @@ footer::before {
   letter-spacing: 0.26em;
   text-transform: uppercase;
   color: var(--text-3);
-  opacity: 0.5;
   z-index: 4;
 }
 .scroll-line {
