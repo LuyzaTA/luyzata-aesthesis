@@ -9,13 +9,13 @@
 - Push: `git push origin main`
 
 **Vercel**
-- Account: `alexandretluyza-1187` (team: `luyza-alexandre-s-projects`)
-- Project: `luyzata-aesthesis-nl`
+- Account: `alexandretluyza-1187` (scope: `luyza-alexandres-projects`)
+- Project: `luyzata-aesthesis`
 - Production URL: https://luyzata-aesthesis-nl.vercel.app
-- Deploy: `vercel --prod` (`.vercel/project.json` locks the CLI to the correct project)
-- ⚠️ There is a stale second project `luyzata-aesthesis-nu.vercel.app` — never deploy there
+- Deploy: `vercel --prod --scope luyza-alexandres-projects`
+- If `.vercel/` is missing or stale: `vercel link --scope luyza-alexandres-projects --yes` first
 
-**Standing instruction:** Every change must be committed, pushed to GitHub (`git push origin main`), and deployed (`vercel --prod`).
+**Standing instruction:** Every change must be committed, pushed to GitHub (`git push origin main`), and deployed (`vercel --prod --scope luyza-alexandres-projects`).
 
 ---
 
