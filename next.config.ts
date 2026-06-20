@@ -13,13 +13,20 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        // Apply to all routes except Next.js static chunks (those already have immutable cache via content hash)
-        source: '/((?!_next/static|_next/image).*)',
+        // API routes: never cache, always fetch fresh from origin
+        source: '/api/:path*',
         headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=0, must-revalidate',
-          },
+          { key: 'Cache-Control', value: 'no-store, must-revalidate' },
+          { key: 'Pragma', value: 'no-cache' },
+        ],
+      },
+      {
+        // HTML pages and assets (except Next.js static chunks which are immutable by content hash)
+        // no-cache = revalidate with origin before serving; no "public" so CDN/mobile proxies don't cache
+        source: '/((?!_next/static|_next/image|api).*)',
+        headers: [
+          { key: 'Cache-Control', value: 'no-cache, must-revalidate' },
+          { key: 'Pragma', value: 'no-cache' },
         ],
       },
     ]

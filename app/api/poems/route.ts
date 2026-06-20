@@ -1,6 +1,8 @@
 import { put, list } from '@vercel/blob'
 import { NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
 const PATHNAME = 'data/user-poems.json'
 
 const EMPTY = { poems: [], hidden: [], edits: {} }
@@ -27,9 +29,13 @@ export async function GET() {
     // Append timestamp to bypass Vercel CDN cache for this public blob
     const url = `${blobs[0].url}?t=${Date.now()}`
     const res = await fetch(url, { cache: 'no-store' })
-    return NextResponse.json(parse(await res.json()))
+    return NextResponse.json(parse(await res.json()), {
+      headers: { 'Cache-Control': 'no-store, must-revalidate' },
+    })
   } catch {
-    return NextResponse.json(EMPTY)
+    return NextResponse.json(EMPTY, {
+      headers: { 'Cache-Control': 'no-store, must-revalidate' },
+    })
   }
 }
 
