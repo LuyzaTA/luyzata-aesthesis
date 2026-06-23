@@ -19,7 +19,7 @@ export default function PoemSearch({ poems: initial }: PoemSearchProps) {
   const [addingPoem,   setAddingPoem]   = useState(false)
   const { t, lang } = useLanguage()
 
-  const { activePoems, hidePoem, saveEdit, addPoem, getEdited, loaded, translating } = usePoems(initial, lang)
+  const { activePoems, hidePoem, saveEdit, addPoem, getEdited, loaded } = usePoems(initial)
 
   const filtered = useMemo(() => {
     if (!query.trim()) return activePoems
@@ -64,11 +64,9 @@ export default function PoemSearch({ poems: initial }: PoemSearchProps) {
       <p className="font-cinzel text-[0.6rem] tracking-[0.12em] uppercase text-[var(--text-faint)] mb-10">
         {!loaded
           ? t('searchLoading')
-          : translating
-            ? lang === 'en' ? 'Translating poems…' : 'A traduzir poemas…'
-            : filtered.length === activePoems.length
-              ? `${activePoems.length} ${t('searchPoems')}`
-              : `${filtered.length} ${t('searchOf')} ${activePoems.length} ${t('searchPoems')}`}
+          : filtered.length === activePoems.length
+            ? `${activePoems.length} ${t('searchPoems')}`
+            : `${filtered.length} ${t('searchOf')} ${activePoems.length} ${t('searchPoems')}`}
       </p>
 
       {!loaded ? (

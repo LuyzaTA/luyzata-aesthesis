@@ -7,8 +7,7 @@ import ScrollBanner from '@/components/ui/ScrollBanner'
 import OrnamentalDivider from '@/components/ui/OrnamentalDivider'
 import ShareButtons from '@/components/poetry/ShareButtons'
 import PoemPageActions from '@/components/poetry/PoemPageActions'
-import type { Poem } from '@/lib/data/poems'
-import { getPoemContent } from '@/lib/data/poems'
+import type { Poem, PoemTranslation } from '@/lib/data/poems'
 import { formatDate } from '@/lib/utils'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
 
@@ -16,18 +15,64 @@ interface DynamicPoemPageProps {
   slug: string
 }
 
+async function translatePoem(poem: Poem, targetLang: 'pt' | 'en'): Promise<PoemTranslation | null> {
+  const res = await fetch('/api/poems/translate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ poems: [poem], targetLang }),
+  })
+  if (!res.ok) return null
+  const { translations } = await res.json()
+  const tr = translations?.[0]
+  if (!tr) return null
+  return { title: tr.title, body: tr.body, excerpt: tr.excerpt }
+}
+
 export default function DynamicPoemPage({ slug }: DynamicPoemPageProps) {
-  const { getUserPoem, loaded } = usePoems([])
+  const { getUserPoem, saveEdit, loaded } = usePoems([])
   const [poem, setPoem] = useState<Poem | null>(null)
   const [ready, setReady] = useState(false)
-  const { t, locale, lang } = useLanguage()
+  const [displayLang, setDisplayLang] = useState<'pt' | 'en'>('pt')
+  const [isTranslating, setIsTranslating] = useState(false)
+  const { t, locale } = useLanguage()
 
   useEffect(() => {
     if (!loaded) return
     const found = getUserPoem(slug)
     setPoem(found ?? null)
+    if (found) setDisplayLang(found.language)
     setReady(true)
   }, [loaded, slug, getUserPoem])
+
+  const getContent = (): PoemTranslation | null => {
+    if (!poem) return null
+    if (displayLang === poem.language) return { title: poem.title, body: poem.body, excerpt: poem.excerpt }
+    return poem.translations?.[displayLang] ?? { title: poem.title, body: poem.body, excerpt: poem.excerpt }
+  }
+
+  const handleLangToggle = async (targetLang: 'pt' | 'en') => {
+    if (!poem || targetLang === displayLang) return
+    setDisplayLang(targetLang)
+
+    if (targetLang === poem.language || poem.translations?.[targetLang]) return
+
+    setIsTranslating(true)
+    try {
+      const translation = await translatePoem(poem, targetLang)
+      if (translation) {
+        const updated: Poem = {
+          ...poem,
+          translations: { ...(poem.translations ?? {}), [targetLang]: translation },
+        }
+        setPoem(updated)
+        await saveEdit(poem.slug, { translations: updated.translations })
+      }
+    } catch {
+      setDisplayLang(poem.language)
+    } finally {
+      setIsTranslating(false)
+    }
+  }
 
   if (!ready) {
     return (
@@ -65,7 +110,7 @@ export default function DynamicPoemPage({ slug }: DynamicPoemPageProps) {
     )
   }
 
-  const content = getPoemContent(poem, lang)
+  const content = getContent()!
 
   return (
     <div style={{ paddingTop: 'var(--nav-h)' }}>
@@ -96,6 +141,35 @@ export default function DynamicPoemPage({ slug }: DynamicPoemPageProps) {
             <span className="font-cinzel text-[0.6rem] tracking-[0.12em] uppercase text-[var(--text-faint)]">
               {poem.readingTime} {t('poemMinRead')}
             </span>
+
+            {/* Per-poem language toggle */}
+            <span className="text-[var(--border-strong)]" aria-hidden>·</span>
+            <div className="flex items-center gap-1.5">
+              {(['pt', 'en'] as const).map((l, i) => (
+                <>
+                  {i > 0 && <span key={`sep-${l}`} className="font-cinzel text-[0.5rem] text-[var(--border-strong)]">·</span>}
+                  <button
+                    key={l}
+                    onClick={() => handleLangToggle(l)}
+                    disabled={isTranslating}
+                    className={[
+                      'font-cinzel text-[0.55rem] tracking-[0.15em] uppercase transition-colors duration-200 disabled:opacity-40',
+                      displayLang === l
+                        ? 'text-[var(--accent)]'
+                        : 'text-[var(--text-faint)] hover:text-[var(--text-muted)]',
+                    ].join(' ')}
+                    aria-label={l === 'pt' ? 'Ver em português' : 'View in English'}
+                  >
+                    {l.toUpperCase()}
+                  </button>
+                </>
+              ))}
+              {isTranslating && (
+                <span className="ml-1 font-cinzel text-[0.5rem] tracking-[0.1em] uppercase text-[var(--text-faint)] animate-pulse">
+                  …
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </header>

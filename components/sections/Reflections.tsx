@@ -17,7 +17,7 @@ export default function Reflections({ poems: initial }: ReflectionsProps) {
   const inView = useInView(ref, { once: true, margin: '-60px' })
 
   const { t, lang } = useLanguage()
-  const { activePoems, saveEdit, loaded } = usePoems(initial, lang)
+  const { activePoems, saveEdit, loaded } = usePoems(initial)
   const shown = loaded ? activePoems.filter((p) => p.featured).slice(0, 3) : []
 
   return (
