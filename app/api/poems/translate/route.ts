@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import type { Poem, PoemTranslation } from '@/lib/data/poems'
+import type { Poem } from '@/lib/data/poems'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,10 +15,16 @@ interface TranslatedPoem {
   excerpt: string
 }
 
+// Anthropic API keys are ASCII-only; strip non-printable chars (incl. BOM U+FEFF)
+// that Windows PowerShell injects when piping env vars via stdin to Vercel CLI
+function cleanEnvKey(raw: string | undefined): string {
+  return (raw ?? '').replace(/[^\x20-\x7E]/g, '').trim()
+}
+
 export async function POST(req: Request) {
   try {
     const { poems, targetLang }: TranslateRequest = await req.json()
-    const apiKey = process.env.ANTHROPIC_API_KEY
+    const apiKey = cleanEnvKey(process.env.ANTHROPIC_API_KEY)
     if (!apiKey) {
       return NextResponse.json({ error: 'ANTHROPIC_API_KEY not set' }, { status: 500 })
     }
