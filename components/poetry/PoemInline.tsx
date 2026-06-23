@@ -5,6 +5,7 @@ import OrnamentalDivider from '@/components/ui/OrnamentalDivider'
 import ShareButtons from '@/components/poetry/ShareButtons'
 import PoemActions from '@/components/poetry/PoemActions'
 import type { Poem } from '@/lib/data/poems'
+import { getPoemContent } from '@/lib/data/poems'
 import { formatDate } from '@/lib/utils'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
 
@@ -16,8 +17,9 @@ interface PoemInlineProps {
 }
 
 export default function PoemInline({ poem, onHide, onSave, overrides }: PoemInlineProps) {
-  const bannerText = poem.title.trim() || poem.author
-  const { t, locale } = useLanguage()
+  const { t, locale, lang } = useLanguage()
+  const content = getPoemContent(poem, lang)
+  const bannerText = content.title.trim() || poem.author
 
   return (
     <div className="border border-[var(--border)] bg-[var(--bg-surface)]">
@@ -82,7 +84,7 @@ export default function PoemInline({ poem, onHide, onSave, overrides }: PoemInli
 
         {/* Poem text */}
         <article className="poem-body text-left">
-          {poem.body.map((stanza, i) =>
+          {content.body.map((stanza, i) =>
             /<[^>]+>/.test(stanza) ? (
               <p key={i} dangerouslySetInnerHTML={{ __html: stanza }} />
             ) : (

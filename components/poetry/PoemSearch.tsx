@@ -6,6 +6,7 @@ import AddPoemModal from '@/components/poetry/AddPoemModal'
 import PasswordModal from '@/components/ui/PasswordModal'
 import { usePoems } from '@/lib/hooks/usePoems'
 import type { Poem } from '@/lib/data/poems'
+import { getPoemContent } from '@/lib/data/poems'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 interface PoemSearchProps {
@@ -16,20 +17,22 @@ export default function PoemSearch({ poems: initial }: PoemSearchProps) {
   const [query,        setQuery]        = useState('')
   const [gatingPoem,   setGatingPoem]   = useState(false)
   const [addingPoem,   setAddingPoem]   = useState(false)
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
 
-  const { activePoems, hidePoem, saveEdit, addPoem, getEdited, loaded } = usePoems(initial)
+  const { activePoems, hidePoem, saveEdit, addPoem, getEdited, loaded, translating } = usePoems(initial, lang)
 
   const filtered = useMemo(() => {
     if (!query.trim()) return activePoems
     const q = query.toLowerCase()
-    return activePoems.filter(
-      (p) =>
-        p.title.toLowerCase().includes(q) ||
-        p.excerpt.toLowerCase().includes(q) ||
+    return activePoems.filter((p) => {
+      const c = getPoemContent(p, lang)
+      return (
+        c.title.toLowerCase().includes(q) ||
+        c.excerpt.toLowerCase().includes(q) ||
         p.author.toLowerCase().includes(q)
-    )
-  }, [activePoems, query])
+      )
+    })
+  }, [activePoems, query, lang])
 
   return (
     <>
@@ -61,9 +64,11 @@ export default function PoemSearch({ poems: initial }: PoemSearchProps) {
       <p className="font-cinzel text-[0.6rem] tracking-[0.12em] uppercase text-[var(--text-faint)] mb-10">
         {!loaded
           ? t('searchLoading')
-          : filtered.length === activePoems.length
-            ? `${activePoems.length} ${t('searchPoems')}`
-            : `${filtered.length} ${t('searchOf')} ${activePoems.length} ${t('searchPoems')}`}
+          : translating
+            ? lang === 'en' ? 'Translating poems…' : 'A traduzir poemas…'
+            : filtered.length === activePoems.length
+              ? `${activePoems.length} ${t('searchPoems')}`
+              : `${filtered.length} ${t('searchOf')} ${activePoems.length} ${t('searchPoems')}`}
       </p>
 
       {!loaded ? (

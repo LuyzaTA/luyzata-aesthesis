@@ -4,6 +4,7 @@ import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { useRef } from 'react'
 import Link from 'next/link'
 import type { Poem } from '@/lib/data/poems'
+import { getPoemContent } from '@/lib/data/poems'
 import { usePoems } from '@/lib/hooks/usePoems'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
 
@@ -15,9 +16,9 @@ export default function Reflections({ poems: initial }: ReflectionsProps) {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
 
-  const { activePoems, saveEdit, loaded } = usePoems(initial)
+  const { t, lang } = useLanguage()
+  const { activePoems, saveEdit, loaded } = usePoems(initial, lang)
   const shown = loaded ? activePoems.filter((p) => p.featured).slice(0, 3) : []
-  const { t } = useLanguage()
 
   return (
     <section ref={ref} className="py-24 px-6" aria-label={t('reflAriaSection')}>
@@ -56,7 +57,7 @@ export default function Reflections({ poems: initial }: ReflectionsProps) {
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.5, delay: inView ? i * 0.12 : 0, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
               >
-                <PoemTile poem={poem} onRemove={() => saveEdit(poem.slug, { featured: false })} />
+                <PoemTile poem={poem} lang={lang} onRemove={() => saveEdit(poem.slug, { featured: false })} />
               </motion.div>
             ))}
           </AnimatePresence>
@@ -81,8 +82,9 @@ export default function Reflections({ poems: initial }: ReflectionsProps) {
   )
 }
 
-function PoemTile({ poem, onRemove }: { poem: Poem; onRemove: () => void }) {
-  const displayTitle = poem.title.trim() || poem.author
+function PoemTile({ poem, lang, onRemove }: { poem: Poem; lang: 'pt' | 'en'; onRemove: () => void }) {
+  const content = getPoemContent(poem, lang)
+  const displayTitle = content.title.trim() || poem.author
 
   return (
     <div className="relative group/tile h-full">
@@ -127,7 +129,7 @@ function PoemTile({ poem, onRemove }: { poem: Poem; onRemove: () => void }) {
 
           {/* Excerpt */}
           <p className="font-cormorant italic text-[var(--text-muted)] text-base leading-relaxed flex-1">
-            "{poem.excerpt}"
+            "{content.excerpt}"
           </p>
 
           {/* Footer */}

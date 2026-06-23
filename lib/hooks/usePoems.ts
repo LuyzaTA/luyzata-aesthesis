@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { upload } from '@vercel/blob/client'
 import type { Poem } from '@/lib/data/poems'
 
@@ -35,11 +35,14 @@ async function persistState(state: PoemState): Promise<void> {
   }
 }
 
-export function usePoems(initial: Poem[]) {
+export function usePoems(initial: Poem[], lang?: 'pt' | 'en') {
   const [hidden,    setHidden]    = useState<string[]>([])
   const [edits,     setEdits]     = useState<Record<string, Partial<Poem>>>({})
   const [userPoems, setUserPoems] = useState<Poem[]>([])
   const [loaded,    setLoaded]    = useState(false)
+  const [translating, setTranslating] = useState(false)
+  // Track which poem+lang combos we've already attempted, to avoid re-fetching
+  const attempted = useRef(new Set<string>())
 
   useEffect(() => {
     fetchState().then((state) => {
@@ -50,13 +53,57 @@ export function usePoems(initial: Poem[]) {
     }).catch(() => setLoaded(true))
   }, [])
 
+  // Auto-translate poems whose language differs from the current UI lang
+  useEffect(() => {
+    if (!lang || !loaded) return
+
+    const needsTranslation = userPoems.filter(p => {
+      const key = `${p.id}:${lang}`
+      return p.language !== lang && !p.translations?.[lang] && !attempted.current.has(key)
+    })
+
+    if (!needsTranslation.length) return
+
+    // Mark as attempted before the async call so parallel renders don't re-trigger
+    needsTranslation.forEach(p => attempted.current.add(`${p.id}:${lang}`))
+    setTranslating(true)
+
+    fetch('/api/poems/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ poems: needsTranslation, targetLang: lang }),
+    })
+      .then(r => r.json())
+      .then(({ translations }: { translations?: Array<{ id: string; title: string; body: string[]; excerpt: string }> }) => {
+        if (!translations?.length) return
+        setUserPoems(prev => {
+          const updated = prev.map(p => {
+            const tr = translations.find(t => t.id === p.id)
+            if (!tr) return p
+            return {
+              ...p,
+              translations: {
+                ...p.translations,
+                [lang]: { title: tr.title, body: tr.body, excerpt: tr.excerpt },
+              },
+            }
+          })
+          // Persist translations so they survive page reloads
+          persistState({ poems: updated, hidden, edits }).catch(console.error)
+          return updated
+        })
+      })
+      .catch(console.error)
+      .finally(() => setTranslating(false))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lang, loaded, userPoems.length])
+
   const basePoems = loaded
     ? initial
         .filter((p) => !hidden.includes(p.slug))
         .map((p) => (edits[p.slug] ? { ...p, ...edits[p.slug] } : p))
     : []
 
-  // Never return initial before server state loads — prevents flash of hidden poems
   const activePoems: Poem[] = loaded
     ? [...userPoems.filter((p) => !hidden.includes(p.slug)), ...basePoems]
     : []
@@ -106,5 +153,5 @@ export function usePoems(initial: Poem[]) {
   const getUserPoem = (slug: string): Poem | undefined =>
     userPoems.find((p) => p.slug === slug)
 
-  return { activePoems, hidePoem, saveEdit, addPoem, getEdited, getUserPoem, loaded }
+  return { activePoems, hidePoem, saveEdit, addPoem, getEdited, getUserPoem, loaded, translating }
 }

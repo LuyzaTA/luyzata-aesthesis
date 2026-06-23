@@ -8,6 +8,7 @@ import OrnamentalDivider from '@/components/ui/OrnamentalDivider'
 import ShareButtons from '@/components/poetry/ShareButtons'
 import PoemPageActions from '@/components/poetry/PoemPageActions'
 import type { Poem } from '@/lib/data/poems'
+import { getPoemContent } from '@/lib/data/poems'
 import { formatDate } from '@/lib/utils'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
 
@@ -19,7 +20,7 @@ export default function DynamicPoemPage({ slug }: DynamicPoemPageProps) {
   const { getUserPoem, loaded } = usePoems([])
   const [poem, setPoem] = useState<Poem | null>(null)
   const [ready, setReady] = useState(false)
-  const { t, locale } = useLanguage()
+  const { t, locale, lang } = useLanguage()
 
   useEffect(() => {
     if (!loaded) return
@@ -64,6 +65,8 @@ export default function DynamicPoemPage({ slug }: DynamicPoemPageProps) {
     )
   }
 
+  const content = getPoemContent(poem, lang)
+
   return (
     <div style={{ paddingTop: 'var(--nav-h)' }}>
       <header className="relative py-20 px-6">
@@ -78,7 +81,7 @@ export default function DynamicPoemPage({ slug }: DynamicPoemPageProps) {
           </nav>
 
           <ScrollBanner size="lg" className="inline-flex mb-10">
-            {poem.title}
+            {content.title}
           </ScrollBanner>
 
           <div className="flex items-center justify-center gap-6 flex-wrap">
@@ -109,7 +112,7 @@ export default function DynamicPoemPage({ slug }: DynamicPoemPageProps) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={poem.imageSrc}
-                alt={`Imagem associada a ${poem.title}`}
+                alt={`Imagem associada a ${content.title}`}
                 className="max-h-80 w-auto object-contain border border-[var(--border)]"
                 style={{ filter: 'contrast(1.04) brightness(0.96)' }}
               />
@@ -123,7 +126,7 @@ export default function DynamicPoemPage({ slug }: DynamicPoemPageProps) {
         )}
 
         <article className="poem-body text-left">
-          {poem.body.map((stanza, i) =>
+          {content.body.map((stanza, i) =>
             /<[^>]+>/.test(stanza) ? (
               <p key={i} dangerouslySetInnerHTML={{ __html: stanza }} />
             ) : (
@@ -142,7 +145,7 @@ export default function DynamicPoemPage({ slug }: DynamicPoemPageProps) {
 
         <div className="text-center mb-16">
           <p className="section-label mb-4">{t('poemShare')}</p>
-          <ShareButtons title={poem.title} slug={poem.slug} />
+          <ShareButtons title={content.title} slug={poem.slug} />
         </div>
       </main>
     </div>

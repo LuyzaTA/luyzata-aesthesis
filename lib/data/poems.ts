@@ -1,3 +1,9 @@
+export interface PoemTranslation {
+  title: string
+  body: string[]
+  excerpt: string
+}
+
 export interface Poem {
   id: string
   slug: string
@@ -12,9 +18,20 @@ export interface Poem {
   featured: boolean
   language: 'pt' | 'en'
   excerpt: string
-  imageKey?: string    // IndexedDB key for attached image blob
-  imageSrc?: string    // resolved blob URL (runtime only, not persisted)
-  photoCredit?: string // e.g. "Photo by: João Silva"
+  imageKey?: string
+  imageSrc?: string
+  photoCredit?: string
+  translations?: {
+    pt?: PoemTranslation
+    en?: PoemTranslation
+  }
+}
+
+export function getPoemContent(poem: Poem, lang: 'pt' | 'en'): PoemTranslation {
+  if (poem.language === lang) {
+    return { title: poem.title, body: poem.body, excerpt: poem.excerpt }
+  }
+  return poem.translations?.[lang] ?? { title: poem.title, body: poem.body, excerpt: poem.excerpt }
 }
 
 export const poems: Poem[] = []
