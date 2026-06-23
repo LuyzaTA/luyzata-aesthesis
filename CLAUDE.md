@@ -3,8 +3,8 @@
 ## Accounts & Deployment
 
 **GitHub**
-- Repo: https://github.com/luyzatale/luyzata_aesthesis
-- User: `luyzatale`
+- Repo: https://github.com/LuyzaTA/luyzata-aesthesis
+- User: `LuyzaTA`
 - Branch: `main`
 - Push: `git push origin main`
 
