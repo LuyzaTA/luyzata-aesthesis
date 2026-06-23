@@ -27,6 +27,16 @@ export default function EditPoemModal({ poem, overrides, onSave, onClose }: Edit
     return /<[^>]+>/.test(raw) ? raw : raw.replace(/\n/g, '<br>')
   })
   const [lang,         setLang]         = useState<'pt' | 'en'>(merged.language ?? 'pt')
+
+  // English translation fields
+  const existingEn = poem.translations?.en
+  const [enTitle,      setEnTitle]      = useState(existingEn?.title ?? '')
+  const [enBody,       setEnBody]       = useState(() => {
+    if (!existingEn?.body?.length) return ''
+    const raw = existingEn.body.join('\n\n')
+    return /<[^>]+>/.test(raw) ? raw : raw.replace(/\n/g, '<br>')
+  })
+
   const [imageFile,    setImageFile]    = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(merged.imageSrc ?? null)
   const [photoCredit,  setPhotoCredit]  = useState(merged.photoCredit ?? '')
@@ -66,6 +76,8 @@ export default function EditPoemModal({ poem, overrides, onSave, onClose }: Edit
     const plainText = body.replace(/<[^>]+>/g, '').trim()
     if (!plainText) { setError(t('errorEmptyPoem')); return }
 
+    const enPlainText = enBody.replace(/<[^>]+>/g, '').trim()
+
     const changes: Partial<Poem> = {
       title,
       author:      author.trim() || 'Aesthesis',
@@ -74,6 +86,16 @@ export default function EditPoemModal({ poem, overrides, onSave, onClose }: Edit
       readingTime: Math.max(1, Math.ceil(plainText.split(/\s+/).length / 160)),
       excerpt:     plainText.replace(/\s+/g, ' ').slice(0, 120),
       photoCredit: photoCredit.trim() || undefined,
+      translations: {
+        ...(poem.translations ?? {}),
+        ...(enPlainText ? {
+          en: {
+            title: enTitle.trim(),
+            body:  [enBody],
+            excerpt: enPlainText.replace(/\s+/g, ' ').slice(0, 120),
+          }
+        } : {}),
+      },
     }
 
     if (imageFile) {
@@ -164,10 +186,32 @@ export default function EditPoemModal({ poem, overrides, onSave, onClose }: Edit
               </div>
             </div>
 
-            {/* Poem body */}
+            {/* Poem body — original language */}
             <div>
               <p className={labelClass}>{t('fieldPoem')}</p>
               <RichEditor value={body} onChange={setBody} placeholder={t('fieldPoemPlaceholder')} minRows={10} />
+            </div>
+
+            {/* English translation */}
+            <div className="border-t border-[var(--border)] pt-6 space-y-4">
+              <p className="font-cinzel text-[0.55rem] tracking-[0.15em] uppercase text-[var(--text-faint)]">
+                English Translation
+              </p>
+              <div>
+                <label htmlFor={`${uid}-en-ttl`} className={labelClass}>Title (EN)</label>
+                <input
+                  id={`${uid}-en-ttl`}
+                  type="text"
+                  value={enTitle}
+                  onChange={(e) => setEnTitle(e.target.value)}
+                  placeholder="English title"
+                  className={inputClass}
+                />
+              </div>
+              <div>
+                <p className={labelClass}>Poem (EN)</p>
+                <RichEditor value={enBody} onChange={setEnBody} placeholder="English translation…" minRows={10} />
+              </div>
             </div>
 
             {/* Image */}
