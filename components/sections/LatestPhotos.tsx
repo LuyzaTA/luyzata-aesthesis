@@ -2,19 +2,20 @@
 
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import type { Photo } from '@/lib/data/photos'
+import { usePhotos, type DisplayPhoto } from '@/lib/hooks/usePhotos'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 interface LatestPhotosProps {
   photos: Photo[]
 }
 
-export default function LatestPhotos({ photos }: LatestPhotosProps) {
+export default function LatestPhotos({ photos: staticPhotos }: LatestPhotosProps) {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
   const { t } = useLanguage()
+  const { allPhotos } = usePhotos(staticPhotos)
 
   return (
     <section ref={ref} className="py-24 px-6" aria-label={t('latestAriaSection')}>
@@ -41,7 +42,7 @@ export default function LatestPhotos({ photos }: LatestPhotosProps) {
 
         {/* Photo grid — asymmetric editorial layout */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-          {photos.slice(0, 6).map((photo, i) => (
+          {allPhotos.slice(0, 6).map((photo, i) => (
             <motion.div
               key={photo.id}
               initial={{ opacity: 0, y: 24 }}
@@ -78,33 +79,24 @@ export default function LatestPhotos({ photos }: LatestPhotosProps) {
   )
 }
 
-function PhotoTile({ photo, priority = false }: { photo: Photo; priority?: boolean }) {
+function PhotoTile({ photo, priority = false }: { photo: DisplayPhoto; priority?: boolean }) {
   return (
     <Link
       href="/fotos"
       className="block relative overflow-hidden group bg-[var(--bg-surface)]"
       style={{ aspectRatio: (photo.width ?? 4) > (photo.height ?? 3) ? '4/3' : '3/4' }}
-      aria-label={`Ver foto: ${photo.caption ?? photo.alt}`}
+      aria-label={`Ver foto: ${photo.alt}`}
     >
-      <Image
-        src={`/photos/${photo.filename}`}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={photo.src}
         alt={photo.alt}
-        fill
-        sizes="(max-width: 768px) 50vw, 25vw"
-        className="object-cover transition-all duration-700 grayscale-[20%] group-hover:grayscale-0 group-hover:scale-103"
-        priority={priority}
+        className="absolute inset-0 w-full h-full object-cover transition-all duration-700 grayscale-[20%] group-hover:grayscale-0 group-hover:scale-103"
+        loading={priority ? 'eager' : 'lazy'}
         style={{ filter: 'contrast(1.05) brightness(0.96)' }}
       />
       {/* Hover overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-transparent opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
-      {/* Caption on hover */}
-      {photo.caption && (
-        <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-          <p className="font-cinzel text-[0.55rem] tracking-[0.15em] uppercase text-[var(--text-primary)]">
-            {photo.caption}
-          </p>
-        </div>
-      )}
     </Link>
   )
 }

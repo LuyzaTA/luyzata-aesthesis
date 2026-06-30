@@ -4,7 +4,7 @@ import LatestPhotos from '@/components/sections/LatestPhotos'
 import Reflections from '@/components/sections/Reflections'
 import OrnamentalDivider from '@/components/ui/OrnamentalDivider'
 import { getAllPoems } from '@/lib/data/poems'
-import { getFeaturedPhotos } from '@/lib/data/photos'
+import { getAllPhotos } from '@/lib/data/photos'
 
 export const metadata: Metadata = {
   title: 'Aesthesis — Poesia & Fotografia',
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   const allPoems = getAllPoems()
-  const featuredPhotos = getFeaturedPhotos()
+  const featuredPhotos = getAllPhotos()
 
   return (
     <>
