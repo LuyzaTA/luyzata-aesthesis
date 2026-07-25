@@ -21,13 +21,13 @@ export default function HomePage() {
       {/* Hero — full viewport, manuscript opening */}
       <HeroSection />
 
+      {/* Featured Poems */}
+      <OrnamentalDivider className="max-w-site mx-auto px-6" />
+      <Reflections poems={allPoems} />
+
       {/* Latest Photography */}
       <OrnamentalDivider className="max-w-site mx-auto px-6" />
       <LatestPhotos photos={featuredPhotos} />
-
-      {/* Recent Poems */}
-      <OrnamentalDivider className="max-w-site mx-auto px-6" />
-      <Reflections poems={allPoems} />
 
       {/* Closing visual space */}
       <OrnamentalDivider variant="short" className="max-w-site mx-auto px-6 pb-8" />
