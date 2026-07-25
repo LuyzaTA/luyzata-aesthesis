@@ -149,6 +149,9 @@ const strings = {
     sobreBioThemesVal: 'Liberdade e confinamento, o tempo subjetivo, o diálogo entre interior e mundo externo, o ser versus o nada.',
     sobreBioPersonalityVal: 'Silencioso, observador, de fala rara; escreve para entender a si mesmo e ao mundo.',
     sobreBioSignatureVal: 'Usa imagens de mar, céu, portas, sombras e horizontes, de tempos sentidos, presença genuína.',
+    sobreEdit: 'Editar',
+    sobreSaving: 'A guardar…',
+    sobreSaveError: 'Não foi possível guardar. Tente novamente.',
 
     // Contato page
     contatoLabel: 'Correspondência',
@@ -328,6 +331,9 @@ const strings = {
     sobreBioThemesVal: 'Freedom and confinement, subjective time, the dialogue between the inner self and the outer world, being versus nothingness.',
     sobreBioPersonalityVal: 'Silent, observant, rarely speaking; writes to understand himself and the world.',
     sobreBioSignatureVal: 'Uses images of sea, sky, doors, shadows and horizons, of felt times, genuine presence.',
+    sobreEdit: 'Edit',
+    sobreSaving: 'Saving…',
+    sobreSaveError: 'Could not save. Please try again.',
 
     // Contato page
     contatoLabel: 'Correspondence',
