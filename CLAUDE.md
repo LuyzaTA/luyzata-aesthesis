@@ -11,7 +11,7 @@
 **Vercel**
 - Account: `alexandretluyza-1187` (scope: `luyza-alexandres-projects`)
 - Project: `luyzata-aesthesis`
-- Production URL: https://luyzata-aesthesis-nl.vercel.app
+- Production URL: https://luyzata-aesthesis.vercel.app  (the old `-nl` URL now 404s — do not use it)
 - Deploy: `vercel --prod --scope luyza-alexandres-projects`
 - If `.vercel/` is missing or stale: `vercel link --scope luyza-alexandres-projects --yes` first
 
