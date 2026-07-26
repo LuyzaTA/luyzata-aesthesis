@@ -1,9 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import Link from 'next/link'
 import { CornerOrnament } from '@/components/ui/OrnamentalDivider'
-import InkButton from '@/components/ui/InkButton'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 const container = {
@@ -113,41 +111,10 @@ export default function HeroSection() {
 
         <motion.p
           variants={item}
-          className="font-cinzel text-[0.65rem] tracking-[0.22em] uppercase text-[var(--text-muted)] mb-12"
+          className="font-cinzel text-[0.65rem] tracking-[0.22em] uppercase text-[var(--text-muted)]"
         >
           {t('heroTagline')}
         </motion.p>
-
-        <motion.div
-          variants={item}
-          className="flex flex-wrap items-center justify-center gap-4"
-        >
-          <InkButton href="/aesthesis" variant="primary" size="md">
-            {t('heroCta1')}
-          </InkButton>
-          <InkButton href="/fotos" variant="outline" size="md">
-            {t('heroCta2')}
-          </InkButton>
-        </motion.div>
-
-        <motion.div
-          variants={item}
-          className="flex flex-wrap items-center justify-center gap-6 mt-6"
-        >
-          <Link
-            href="/sobre"
-            className="font-cinzel text-[0.6rem] tracking-[0.15em] uppercase text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors duration-300 ink-link"
-          >
-            {t('navLinkSobre')}
-          </Link>
-          <span className="text-[var(--border-strong)]" aria-hidden>·</span>
-          <Link
-            href="/contato"
-            className="font-cinzel text-[0.6rem] tracking-[0.15em] uppercase text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors duration-300 ink-link"
-          >
-            {t('navLinkContato')}
-          </Link>
-        </motion.div>
       </motion.div>
     </section>
   )
