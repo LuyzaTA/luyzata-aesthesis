@@ -7,6 +7,7 @@ import ScrollBanner from '@/components/ui/ScrollBanner'
 import ReadingProgress from '@/components/ui/ReadingProgress'
 import ShareButtons from '@/components/poetry/ShareButtons'
 import PoemPageActions from '@/components/poetry/PoemPageActions'
+import PoemBody from '@/components/poetry/PoemBody'
 import DynamicPoemPage from '@/components/poetry/DynamicPoemPage'
 import { formatDate } from '@/lib/utils'
 
@@ -105,15 +106,7 @@ export default async function PoemPage({ params }: PageProps) {
 
           <PoemPageActions poem={poem} />
 
-          <article className="poem-body text-center">
-            {poem.body.map((stanza, i) =>
-              /<[^>]+>/.test(stanza) ? (
-                <p key={i} dangerouslySetInnerHTML={{ __html: stanza }} />
-              ) : (
-                <p key={i}>{stanza}</p>
-              )
-            )}
-          </article>
+          <PoemBody body={poem.body} align="center" />
 
           {/* Author note */}
           {poem.authorNote && (

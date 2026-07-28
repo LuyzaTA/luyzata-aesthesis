@@ -142,7 +142,7 @@ export default function RichEditor({
         onInput={emit}
         onBlur={emit}
         data-placeholder={placeholder}
-        className="outline-none px-4 py-3 font-cormorant italic text-[var(--text-primary)] text-base leading-snug bg-[var(--bg-surface)] empty:before:content-[attr(data-placeholder)] empty:before:text-[var(--text-faint)] empty:before:pointer-events-none"
+        className="rich-editor-body outline-none px-4 py-3 font-cormorant italic text-[var(--text-primary)] text-base leading-snug bg-[var(--bg-surface)] empty:before:content-[attr(data-placeholder)] empty:before:text-[var(--text-faint)] empty:before:pointer-events-none"
         style={{ minHeight: `${minRows * 1.8}rem` }}
         role="textbox"
         aria-multiline="true"

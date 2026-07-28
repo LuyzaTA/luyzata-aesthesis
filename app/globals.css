@@ -251,6 +251,22 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 0;
   }
 
+  /* Rich (user-authored) bodies carry their own per-line <p>/<br> structure —
+     often one <p> per line. Keep consecutive lines tight so the final page
+     matches the editor; blank lines still separate stanzas. */
+  .poem-body--rich :where(p, div, h1, h2, h3, h4, li) {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    white-space: normal;
+  }
+
+  /* Editor preview mirrors the rich final rendering: tight lines, blank-line
+     stanza gaps — so the poem looks the same while writing and once published. */
+  .rich-editor-body :where(p, div, h1, h2, h3, h4, li) {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
   /* Force-override inline colors injected by execCommand in dark mode */
   .dark .poem-body,
   .dark .poem-body * {

@@ -4,6 +4,7 @@ import ScrollBanner from '@/components/ui/ScrollBanner'
 import OrnamentalDivider from '@/components/ui/OrnamentalDivider'
 import ShareButtons from '@/components/poetry/ShareButtons'
 import PoemActions from '@/components/poetry/PoemActions'
+import PoemBody from '@/components/poetry/PoemBody'
 import type { Poem } from '@/lib/data/poems'
 import { getPoemContent } from '@/lib/data/poems'
 import { formatDate } from '@/lib/utils'
@@ -84,15 +85,7 @@ export default function PoemInline({ poem, onHide, onSave, overrides }: PoemInli
           )}
 
           {/* Poem text */}
-          <article className="poem-body text-left">
-            {content.body.map((stanza, i) =>
-              /<[^>]+>/.test(stanza) ? (
-                <p key={i} dangerouslySetInnerHTML={{ __html: stanza }} />
-              ) : (
-                <p key={i}>{stanza}</p>
-              )
-            )}
-          </article>
+          <PoemBody body={content.body} align="left" />
 
           {poem.authorNote && (
             <p className="mt-10 text-center font-cinzel text-[0.55rem] tracking-[0.12em] uppercase text-[var(--text-faint)]">
