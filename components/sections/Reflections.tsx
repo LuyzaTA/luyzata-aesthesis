@@ -101,7 +101,7 @@ function PoemTile({ poem, lang, onRemove }: { poem: Poem; lang: 'pt' | 'en'; onR
       </button>
 
       <Link
-        href="/aesthesis"
+        href={`/aesthesis/${poem.slug}`}
         className="block parchment-card p-8 h-full"
         aria-label={`Ver poema: ${displayTitle}`}
       >
