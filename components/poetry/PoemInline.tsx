@@ -41,10 +41,6 @@ export default function PoemInline({ poem, onHide, onSave, overrides }: PoemInli
             <time dateTime={poem.date} className="font-cinzel text-[0.6rem] tracking-[0.12em] uppercase text-[var(--text-faint)]">
               {formatDate(poem.date, locale)}
             </time>
-            <span className="text-[var(--border-strong)]" aria-hidden>·</span>
-            <span className="font-cinzel text-[0.6rem] tracking-[0.12em] uppercase text-[var(--text-faint)]">
-              {poem.readingTime} {t('poemMinRead')}
-            </span>
           </div>
         </div>
       </div>

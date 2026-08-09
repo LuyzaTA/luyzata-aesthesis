@@ -57,9 +57,6 @@ export default function PoemCard({ poem, index, active, onClick }: PoemCardProps
             >
               {poem.title}
             </h3>
-            <span className="flex-shrink-0 font-cinzel text-[0.55rem] tracking-[0.12em] uppercase text-[var(--text-faint)]">
-              {poem.readingTime} min
-            </span>
           </div>
 
           <p className="font-cormorant italic text-[var(--text-muted)] text-base leading-relaxed mb-5 line-clamp-3">

@@ -89,10 +89,6 @@ export default async function PoemPage({ params }: PageProps) {
               >
                 {formatDate(poem.date)}
               </time>
-              <span className="text-[var(--border-strong)]" aria-hidden>·</span>
-              <span className="font-cinzel text-[0.6rem] tracking-[0.12em] uppercase text-[var(--text-faint)]">
-                {poem.readingTime} min de leitura
-              </span>
             </div>
           </div>
         </header>

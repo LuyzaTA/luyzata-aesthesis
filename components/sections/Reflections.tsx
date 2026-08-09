@@ -133,13 +133,10 @@ function PoemTile({ poem, lang, onRemove }: { poem: Poem; lang: 'pt' | 'en'; onR
           </p>
 
           {/* Footer */}
-          <div className="pt-4 border-t border-[var(--border)] flex items-center justify-between">
+          <div className="pt-4 border-t border-[var(--border)] flex items-center">
             <cite className="font-cinzel text-[0.55rem] tracking-[0.12em] uppercase text-[var(--text-faint)] not-italic">
               {poem.author}
             </cite>
-            <span className="font-cinzel text-[0.55rem] tracking-[0.1em] uppercase text-[var(--text-faint)]">
-              {poem.readingTime} min
-            </span>
           </div>
         </div>
       </Link>
