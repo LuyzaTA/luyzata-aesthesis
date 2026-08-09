@@ -130,6 +130,7 @@ const strings = {
     // Fotos page header
     fotosLabel: 'Fotografia',
     fotosTitle: 'Fotos',
+    fotosCredit: 'Todas as fotos por L. Serrano',
 
     // Sobre page
     sobreTitle: 'Sobre Aesthesis',
@@ -312,6 +313,7 @@ const strings = {
     // Fotos page header
     fotosLabel: 'Photography',
     fotosTitle: 'Photos',
+    fotosCredit: 'All photographs by L. Serrano',
 
     // Sobre page
     sobreTitle: 'About Aesthesis',

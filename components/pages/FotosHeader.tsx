@@ -22,9 +22,13 @@ export default function FotosHeader() {
       <div className="max-w-2xl mx-auto text-center">
         <p className="section-label mb-8">{t('fotosLabel')}</p>
 
-        <ScrollBanner size="lg" className="inline-flex mb-10">
+        <ScrollBanner size="lg" className="inline-flex mb-6">
           {t('fotosTitle')}
         </ScrollBanner>
+
+        <p className="font-cormorant italic text-[var(--text-secondary)] text-lg">
+          {t('fotosCredit')}
+        </p>
 
         <OrnamentalDivider variant="short" className="mt-10" />
       </div>

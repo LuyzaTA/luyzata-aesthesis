@@ -317,11 +317,14 @@ function Lightbox({
             </div>
           </div>
 
-          <div className="overflow-hidden w-full">
-            <PhotoImg
-              photo={photo}
-              priority
-              className="w-full max-h-[80vh] object-contain !grayscale-0 !scale-100 !transition-none"
+          <div className="w-full flex justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={photo.src}
+              alt={photo.alt}
+              className="max-w-full max-h-[85vh] w-auto h-auto object-contain"
+              style={{ filter: 'contrast(1.04) brightness(0.97)' }}
+              loading="eager"
             />
           </div>
 
