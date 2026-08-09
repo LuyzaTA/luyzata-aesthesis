@@ -130,7 +130,7 @@ const strings = {
     // Fotos page header
     fotosLabel: 'Fotografia',
     fotosTitle: 'Fotos',
-    fotosCredit: 'Todas as fotos por L. Serrano',
+    fotosCredit: 'Todas as fotografias por L. Serrano',
 
     // Sobre page
     sobreTitle: 'Sobre Aesthesis',
