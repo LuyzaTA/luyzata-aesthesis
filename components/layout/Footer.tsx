@@ -13,7 +13,6 @@ export default function Footer() {
     { href: '/aesthesis', label: 'Aesthesis' },
     { href: '/fotos',     label: t('fotosTitle') },
     { href: '/sobre',     label: t('navLinkSobre') },
-    { href: '/contato',   label: t('navLinkContato') },
   ]
 
   return (

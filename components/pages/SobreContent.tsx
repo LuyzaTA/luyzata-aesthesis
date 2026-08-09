@@ -200,9 +200,6 @@ export default function SobreContent() {
           <InkButton href="/aesthesis" variant="primary" size="md">
             {t('sobreCtaPoems')}
           </InkButton>
-          <InkButton href="/contato" variant="outline" size="md">
-            {t('sobreCtaContact')}
-          </InkButton>
         </div>
       </main>
 
