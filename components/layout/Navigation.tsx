@@ -17,7 +17,6 @@ export default function Navigation() {
     { href: '/',           label: 'Home' },
     { href: '/aesthesis',  label: 'Aesthesis' },
     { href: '/fotos',      label: t('fotosTitle') },
-    { href: '/sobre',      label: t('navLinkSobre') },
     { href: '/contato',    label: t('navLinkContato') },
   ]
 
